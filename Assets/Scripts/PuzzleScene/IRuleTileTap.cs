@@ -1,13 +1,12 @@
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// All classes which implement this interface automatically are called by PuzzleInputHandler class.
+/// </summary>
 public interface IRuleTileTap
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     /// <param name="position">stores tapped position</param>
-    /// <param name="table">stores table data</param>
-    /// <param name="tileRefComponentMap"></param>
-    public void Execute(Vector2 position, ref TileStateValue[,] table, ref Dictionary<int, TileStateRef> tileRefComponentMap);
+    /// <param name="puzzle">stores all puzzle data</param>
+    public void Execute(Vector2Int position, Puzzle puzzle);
 }

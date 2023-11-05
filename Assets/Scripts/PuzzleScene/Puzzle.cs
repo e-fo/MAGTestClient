@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -6,48 +7,40 @@ public class Puzzle : MonoBehaviour
 {
     public int Width = 7;
     public int Height = 7;
-    public GameObject[] ElementsPrefab;
+    public TileConfig[] TileConfigs;
+    public GameObject Prefab;
 
-    [NonSerialized] public GameObject[,] Grid;
+    [NonSerialized] public TileStateValue[,] Table;
+    /// <summary>
+    /// stores all reference type states of tiles in a map
+    /// (key: GameObject InstanceId, Val: Reference type components)
+    /// </summary>
+    [NonSerialized] public Dictionary<int, TileStateRef> TilesRefComponents = new();
 
     void Start()
     {
-        generateTable(Grid, this.transform, ElementsPrefab, new Vector2Int(Width, Height), OnTappedTile);
-        static void generateTable(
-            GameObject[,] grid,
-            Transform parent,
-            in GameObject[] prefabs,
-            in Vector2Int tableSize,
-            UnityAction<Vector2Int> onTappedInputHandler)
+        //initialize table
         {
-            grid = new GameObject[tableSize.x, tableSize.y];
-            float startX = parent.position.x;
-            float startY = parent.position.y;
-
-            for (int x = 0; x < tableSize.x; x++)
+            Table = new TileStateValue[Width, Height];
+            float startX = transform.position.x;
+            float startY = transform.position.y;
+            var inputHandler = new UnityAction<Vector2Int>(GetComponent<PuzzleInputHandler>().OnTapHandler);
+            for (int x = 0; x < Width; x++)
             {
-                for (int y = 0; y < tableSize.y; y++)
+                for (int y = 0; y < Height; y++)
                 {
-                    Vector2 spawnPosition = new Vector2(startX + x, startY + y);
+                    var tuple = PuzzleUtil.InstantiateTile(
+                        Prefab,
+                        TileConfigs[UnityEngine.Random.Range(0, TileConfigs.Length)],
+                        transform,
+                        new Vector2(startX + x, startY + y),
+                        inputHandler
+                        );
 
-                    GameObject tile = Instantiate(
-                        prefabs[UnityEngine.Random.Range(0, prefabs.Length)], 
-                        spawnPosition, 
-                        Quaternion.identity);
-
-                    tile.GetComponent<TileInputEvent>()
-                        .OnTileTapped
-                        .AddListener(onTappedInputHandler);
-
-                    tile.transform.parent = parent;
-                    grid[x, y] = tile;
+                    Table[x, y] = tuple.Item1;
+                    TilesRefComponents.Add(tuple.Item1.GameObjectInstanceId, tuple.Item2);
                 }
             }
         }
-    }
-    
-    void OnTappedTile(Vector2Int position)
-    {
-        
     }
 }

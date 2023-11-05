@@ -3,5 +3,5 @@ using UnityEngine;
 [CreateAssetMenu(menuName ="ScriptableObject/Config/EntityConfig")]
 public class TileConfig : ScriptableObject
 {
-    public SOEnumTileType EntityType;
+    [SerializeField] Sprite _sprite; public Sprite Sprite => _sprite;
 }
