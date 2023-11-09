@@ -8,6 +8,8 @@ using UnityEngine;
 /// </summary>
 public struct TileStateValue
 {
+    public static readonly TileStateValue Empty = new TileStateValue(-1,-1);
+
     public TileStateValue(int gameObjectInstanceId, int typeInstanceId)
     {
         GameObjectInstanceId= gameObjectInstanceId;

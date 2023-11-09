@@ -11,11 +11,9 @@ public struct PopIslandRule: IRuleTileTap
         var typeGrid = PuzzleUtil.GetTypeGrid(puzzle.Table);
         var islandIndicies = PuzzleUtil.GetIslandIndices(typeGrid, position);
 
-        foreach(Vector2Int idx in islandIndicies)
+        if(islandIndicies.Length > 1)
         {
-            Debug.Log($"x:{idx.x}-y:{idx.y}");
-            puzzle.TilesRefComponents[puzzle.Table[idx.x, idx.y].GameObjectInstanceId]
-                .Transform.GetComponent<SpriteRenderer>().enabled = false;
+            PuzzleUtil.BatchDestroyTilesUtil(ref puzzle, islandIndicies);
         }
     }
 }
