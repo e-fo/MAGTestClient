@@ -29,7 +29,7 @@ public class Puzzle : MonoBehaviour
             {
                 for (int y = 0; y < Height; y++)
                 {
-                    var tuple = PuzzleUtil.InstantiateTile(
+                    var tuple = PuzzleLogic.InstantiateTile(
                         Prefab,
                         TileConfigs[UnityEngine.Random.Range(0, TileConfigs.Length)],
                         transform,

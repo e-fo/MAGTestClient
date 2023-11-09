@@ -1,4 +1,4 @@
-public static partial class PuzzleUtil
+public static partial class PuzzleLogic
 {
     public static int[,] GetTypeGrid(in TileStateValue[,] grid)
     {

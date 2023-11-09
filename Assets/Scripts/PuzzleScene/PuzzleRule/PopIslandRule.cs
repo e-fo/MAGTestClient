@@ -8,12 +8,12 @@ public struct PopIslandRule: IRuleTileTap
         var go = puzzle.TilesRefComponents[tile.GameObjectInstanceId];
 
         Debug.Log($"You tapped on tile with position: {go.Transform.position}");
-        var typeGrid = PuzzleUtil.GetTypeGrid(puzzle.Table);
-        var islandIndicies = PuzzleUtil.GetIslandIndices(typeGrid, position);
+        var typeGrid = PuzzleLogic.GetTypeGrid(puzzle.Table);
+        var islandIndicies = PuzzleLogic.GetIslandIndices(typeGrid, position);
 
         if(islandIndicies.Length > 1)
         {
-            PuzzleUtil.BatchDestroyTilesUtil(ref puzzle, islandIndicies);
+            PuzzleLogic.BatchDestroyTilesUtil(ref puzzle, islandIndicies);
         }
     }
 }

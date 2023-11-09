@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public static partial class PuzzleUtil
+public static partial class PuzzleLogic
 {
     public static (TileStateValue, TileStateRef) InstantiateTile(
         in GameObject prefab, 

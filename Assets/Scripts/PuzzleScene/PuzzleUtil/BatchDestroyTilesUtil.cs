@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public static partial class PuzzleUtil
+public static partial class PuzzleLogic
 {
     public static void BatchDestroyTilesUtil(ref Puzzle puzzleState, in Vector2Int[] shouldDestroyIndices)
     {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static partial class PuzzleUtil
+public static partial class PuzzleLogic
 {
     public static Vector2Int[] GetIslandIndices(in int[,] typeGrid, in Vector2Int tapPos)
     {
