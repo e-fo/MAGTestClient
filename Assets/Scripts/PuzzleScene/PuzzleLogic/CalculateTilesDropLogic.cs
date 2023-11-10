@@ -8,19 +8,44 @@ public static partial class PuzzleLogic
         int[,] ret = new int[rows, cols];
 
         for (int i = 0; i < rows; ++i)
-            for (int j = 0; j < cols; ++j)
+        {
+            int dropCounter = 0;
+            bool isPreviousEmpty = false;
+            for (int j = 0; j <cols; ++j)
             {
-                if (idGrid[i, j] != -1)
+                if(idGrid[i,j] == -1)
                 {
-                    for (int x = 0; x < rows - j; ++x)
-                    {
-                        int id = idGrid[i, j - x];
-                        if (-1 == id) ret[i,j]++;
-                        else break;
-                    }
+                    if(!isPreviousEmpty) dropCounter = 0;
+                    dropCounter++;
+                    isPreviousEmpty = true;
+                }
+                else
+                {
+                    ret[i,j] = dropCounter;
+                    isPreviousEmpty = false;
                 }
             }
+        }
 
         return ret;
+    }
+
+    public static void ApplyTilesDrop(Puzzle puzzleState, in int[,] dropMap) 
+    {
+        int rows = dropMap.GetLength(0);
+        int cols = dropMap.GetLength(1);
+        var grid = puzzleState.Table;
+
+        for (int i = 0; i < rows; ++i)
+            for (int j = 0; j < cols; ++j)
+            {
+                int drop = dropMap[i, j];
+
+                if(drop > 0)
+                {
+                    grid[i, (j - drop)] = grid[i,j];
+                    grid[i,j] = TileStateValue.Empty;
+                }
+            }
     }
 }

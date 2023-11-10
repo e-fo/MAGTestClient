@@ -5,8 +5,15 @@ using System.Collections.Generic;
 
 public static partial class PuzzlePresentation
 {
-    public static async Task BatchDestroy(TileStateRef[] shouldDestroy)
+    public static async Task BatchDestroy(Puzzle puzzleState, Vector2Int[] islandIndices)
     {
+        TileStateRef[] shouldDestroy = new TileStateRef[islandIndices.Length];
+        for(int i=0; i< islandIndices.Length; ++i) 
+        {
+            var idx = islandIndices[i];
+            int instanceId = puzzleState.Table[idx.x, idx.y].GameObjectInstanceId;
+            shouldDestroy[i] = puzzleState.TilesRefComponents[instanceId]; 
+        }
         List<Task> tweens = new(shouldDestroy.Length);
 
         foreach(var t in shouldDestroy) {

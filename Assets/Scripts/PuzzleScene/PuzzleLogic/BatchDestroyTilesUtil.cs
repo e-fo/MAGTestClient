@@ -2,7 +2,7 @@ using UnityEngine;
 
 public static partial class PuzzleLogic
 {
-    public static void BatchDestroyTilesUtil(ref Puzzle puzzleState, in Vector2Int[] shouldDestroyIndices)
+    public static void BatchDestroyTilesUtil(Puzzle puzzleState, in Vector2Int[] shouldDestroyIndices)
     {
         foreach(var idx in shouldDestroyIndices) {
             int instanceId = puzzleState.Table[idx.x, idx.y].GameObjectInstanceId;
