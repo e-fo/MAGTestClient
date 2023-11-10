@@ -2,7 +2,7 @@ using UnityEngine;
 
 public struct PopIslandRule: IRuleTileTap
 {
-    public void Execute(Vector2Int position, Puzzle puzzle)
+    public async void Execute(Vector2Int position, Puzzle puzzle)
     {
         var tile = puzzle.Table[position.x, position.y];
         var go = puzzle.TilesRefComponents[tile.GameObjectInstanceId];
@@ -13,7 +13,18 @@ public struct PopIslandRule: IRuleTileTap
 
         if(islandIndicies.Length > 1)
         {
-            PuzzleLogic.BatchDestroyTilesUtil(ref puzzle, islandIndicies);
+            {
+                TileStateRef[] shouldDestroy = new TileStateRef[islandIndicies.Length];
+                for(int i=0; i< islandIndicies.Length; ++i) 
+                {
+                    var idx = islandIndicies[i];
+                    int instanceId = puzzle.Table[idx.x, idx.y].GameObjectInstanceId;
+                    shouldDestroy[i] = puzzle.TilesRefComponents[instanceId]; 
+                }
+
+                await PuzzlePresentation.BatchDestroy(shouldDestroy);
+                PuzzleLogic.BatchDestroyTilesUtil(ref puzzle, islandIndicies);
+            }
         }
     }
 }

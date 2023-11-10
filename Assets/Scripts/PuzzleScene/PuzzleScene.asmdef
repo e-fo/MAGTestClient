@@ -1,3 +1,16 @@
 {
-	"name": "PuzzleScene"
+    "name": "PuzzleScene",
+    "rootNamespace": "",
+    "references": [
+        "GUID:1cb7875bcbc4b484daf53fee3e3b97d4"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
