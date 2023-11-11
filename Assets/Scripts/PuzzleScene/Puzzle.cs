@@ -9,7 +9,7 @@ public class Puzzle : MonoBehaviour
     public int Height = 7;
     public TileConfig[] TileConfigs;
     public GameObject Prefab;
-
+    public UnityAction<Vector2Int> InputHandler;
     [NonSerialized] public TileStateValue[,] Table;
     /// <summary>
     /// stores all reference type states of tiles in a map

@@ -18,9 +18,12 @@ public struct PopIslandRule: IRuleTileTap
             await PuzzlePresentation.BatchDestroy(puzzle, islandIndicies);
             PuzzleLogic.BatchDestroyTilesUtil(puzzle, islandIndicies);
 
-            var tilesDrops = PuzzleLogic.CalculateTilesDrop(PuzzleLogic.GetIdGrid(puzzle.Table));
-            await PuzzlePresentation.TileDropVisual(puzzle, tilesDrops);
-            PuzzleLogic.ApplyTilesDrop(puzzle, tilesDrops);
+            var dropMap = PuzzleLogic.CalculateTilesDrop(PuzzleLogic.GetIdGrid(puzzle.Table));
+            await PuzzlePresentation.TileDropVisual(puzzle, dropMap);
+            PuzzleLogic.ApplyTilesDrop(puzzle, dropMap);
+
+            var refillGrid = PuzzleLogic.GenerateRefillGrid(puzzle);
+            //await PuzzlePresentation.RefillDropVisual(puzzle, refillGrid);
         }
     }
 }
