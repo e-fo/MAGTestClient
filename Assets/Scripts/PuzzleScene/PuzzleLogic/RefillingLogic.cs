@@ -18,7 +18,6 @@ public static partial class PuzzleLogic
 
         for(int j=0; j<cols; ++j)
         {
-            int emptyCounter = 0;
             for(int i=0; i<rows; ++i) {
                 refillGrid[i, j] = TileStateValue.Empty.SOEnumTypeInstanceId;
                 if(grid[i,j].GameObjectInstanceId == TileStateValue.Empty.GameObjectInstanceId)
@@ -28,14 +27,13 @@ public static partial class PuzzleLogic
                         puzzleState.Prefab,
                         cnf,
                         puzzleState.transform,
-                        new Vector2Int(i, (rows-j)+j),
+                        new Vector2Int(i, j),
                         puzzleState.InputHandler);
 
                     puzzleState.Table[i, j] = tuple.Item1;
                     puzzleState.TilesRefComponents.Add(tuple.Item1.GameObjectInstanceId, tuple.Item2);
 
-                    refillGrid[i, emptyCounter] = tuple.Item1.GameObjectInstanceId;
-                    //emptyCounter++;
+                    refillGrid[i, j] = tuple.Item1.GameObjectInstanceId;
                 }
             }
         }

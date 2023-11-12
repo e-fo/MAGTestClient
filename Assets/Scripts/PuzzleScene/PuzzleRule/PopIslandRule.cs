@@ -23,7 +23,7 @@ public struct PopIslandRule: IRuleTileTap
             PuzzleLogic.ApplyTilesDrop(puzzle, dropMap);
 
             var refillGrid = PuzzleLogic.GenerateRefillGrid(puzzle);
-            //await PuzzlePresentation.RefillDropVisual(puzzle, refillGrid);
+            await PuzzlePresentation.RefillDropVisual(puzzle, refillGrid);
         }
     }
 }

@@ -24,7 +24,7 @@ public class Puzzle : MonoBehaviour
             Table = new TileStateValue[Width, Height];
             float startX = transform.position.x;
             float startY = transform.position.y;
-            var inputHandler = new UnityAction<Vector2Int>(GetComponent<PuzzleInputHandler>().OnTapHandler);
+            InputHandler = new UnityAction<Vector2Int>(GetComponent<PuzzleInputHandler>().OnTapHandler);
             for (int x = 0; x < Width; x++)
             {
                 for (int y = 0; y < Height; y++)
@@ -34,7 +34,7 @@ public class Puzzle : MonoBehaviour
                         TileConfigs[UnityEngine.Random.Range(0, TileConfigs.Length)],
                         transform,
                         new Vector2(startX + x, startY + y),
-                        inputHandler
+                        InputHandler
                         );
 
                     Table[x, y] = tuple.Item1;
