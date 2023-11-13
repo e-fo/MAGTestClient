@@ -5,11 +5,13 @@ using UnityEngine;
 public class PuzzleInputHandler : MonoBehaviour
 {
     private Puzzle _puzzle;
+    private TileStateValue[,] _grid;
     IRuleTileTap[] tapRules = null;
 
     private void OnEnable()
     {
         _puzzle = GetComponent<Puzzle>();
+        _grid = _puzzle.Table;
 
         //finds all types which implmented IRuleTileTap
         Type[] types = null;
@@ -31,9 +33,13 @@ public class PuzzleInputHandler : MonoBehaviour
 
     public void OnTapHandler(Vector2Int pos)
     {
+        var typeGrid = PuzzleLogic.GetTypeGrid(_puzzle.Table);
+        var cnf = _puzzle.TileConfigs.First(c=>c.GetInstanceID() == typeGrid[pos.x, pos.y]);
+
         for(int i=0; i<tapRules.Length; ++i) 
         {
-            tapRules[i].Execute(pos, _puzzle);
+            if(tapRules[i].AcceptedBaseTypes.Contains(cnf.BaseType))
+                tapRules[i].Execute(pos, _puzzle);
         }
     }
 }

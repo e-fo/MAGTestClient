@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: Cheese
   m_EditorClassIdentifier: 
   _sprite: {fileID: 21300000, guid: 31ce55c2474361d4fab07984f18f9145, type: 3}
+  _genReqs:
+  - NumberOfRequiredItem: 5
+    GeneratedType: {fileID: 11400000, guid: f7152975964e7b54c8be50b306c9c3b5, type: 2}

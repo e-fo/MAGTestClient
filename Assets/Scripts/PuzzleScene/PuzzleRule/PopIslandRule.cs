@@ -1,10 +1,15 @@
+using System.Linq;
 using UnityEngine;
 
 public struct PopIslandRule: IRuleTileTap
 {
+    public TileBaseType[] AcceptedBaseTypes => new TileBaseType[]{TileBaseType.Simple};
+
     public async void Execute(Vector2Int position, Puzzle puzzle)
     {
         var tile = puzzle.Table[position.x, position.y];
+        var cnf = puzzle.TileConfigs.First(c=>c.GetInstanceID() == tile.SOEnumTypeInstanceId);
+
         var go = puzzle.TilesRefComponents[tile.GameObjectInstanceId];
 
         Debug.Log($"You tapped on tile with position: {go.Transform.position}");
