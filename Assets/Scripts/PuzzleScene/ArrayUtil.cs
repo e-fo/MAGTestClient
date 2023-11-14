@@ -27,7 +27,7 @@ public static class ArrayUtil
         {
             for (int j = 0; j < cols; j++)
             {
-                if(EqualityComparer<T>.Default.Equals(array[i, j], value)) ret++;
+                if(!EqualityComparer<T>.Default.Equals(array[i, j], value)) ret++;
             }
         }
 

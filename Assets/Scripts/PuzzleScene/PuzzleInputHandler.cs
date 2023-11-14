@@ -33,8 +33,11 @@ public class PuzzleInputHandler : MonoBehaviour
 
     public void OnTapHandler(Vector2Int pos)
     {
+        if(!_puzzle.InputAvailable) return;
+
         var typeGrid = PuzzleLogic.GetTypeGrid(_puzzle.Grid);
-        var cnf = _puzzle.TileConfigs.First(c=>c.GetInstanceID() == typeGrid[pos.x, pos.y]);
+        var cnf = _puzzle.TileConfigs.FirstOrDefault(c=>c.GetInstanceID() == typeGrid[pos.x, pos.y]);
+        if(null == cnf) return;
 
         for(int i=0; i<tapRules.Length; ++i) 
         {

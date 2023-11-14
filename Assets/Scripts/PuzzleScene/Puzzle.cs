@@ -7,6 +7,7 @@ public class Puzzle : MonoBehaviour
 {
     public int Width = 7;
     public int Height = 7;
+    [NonReorderable] public bool InputAvailable = true;
     public TileConfig[] TileConfigs;
     public GameObject Prefab;
     public UnityAction<Vector2Int> InputHandler;
