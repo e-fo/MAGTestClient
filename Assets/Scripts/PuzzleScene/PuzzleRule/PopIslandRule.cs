@@ -7,12 +7,12 @@ public struct PopIslandRule: IRuleTileTap
 
     public async void Execute(Vector2Int position, Puzzle puzzle)
     {
-        var tile = puzzle.Table[position.x, position.y];
+        var tile = puzzle.Grid[position.x, position.y];
         var cnf = puzzle.TileConfigs.First(c=>c.GetInstanceID() == tile.SOEnumTypeInstanceId);
 
         var go = puzzle.TilesRefComponents[tile.GameObjectInstanceId];
 
-        var islandMap = PuzzleLogic.GetIslandMap(puzzle.Table, position);
+        var islandMap = PuzzleLogic.GetIslandMap(puzzle.Grid, position);
         int islandLength = ArrayUtil.CountNotEqual2D(islandMap, TileStateValue.Empty.GameObjectInstanceId);
 
         var orderedGenReqs = cnf.GenerationReqs.OrderBy(x=>x.NumberOfRequiredItem).ToArray();
@@ -26,12 +26,12 @@ public struct PopIslandRule: IRuleTileTap
             await PuzzlePresentation.BatchDestroyVisual(puzzle, islandMap);
             PuzzleLogic.DestroyTileBatch(puzzle, islandMap);
 
-            var dropMap = PuzzleLogic.CalculateTilesDrop(PuzzleLogic.GetIdGrid(puzzle.Table));
+            var dropMap = PuzzleLogic.CalculateTilesDrop(PuzzleLogic.GetIdGrid(puzzle.Grid));
             await PuzzlePresentation.TileDropVisual(puzzle, dropMap);
-            PuzzleLogic.ApplyTilesDrop(ref puzzle.Table, dropMap);
+            PuzzleLogic.ApplyTilesDrop(ref puzzle.Grid, dropMap);
 
             var refillTypeMap = PuzzleLogic.GenerateRefillMap(
-                PuzzleLogic.GetIdGrid(puzzle.Table),
+                PuzzleLogic.GetIdGrid(puzzle.Grid),
                 puzzle.TileConfigs.Select(c => c.GetInstanceID()).ToArray());
             var instantiateMap = PuzzleLogic.InstantiateTileBatch(puzzle, refillTypeMap);
             await PuzzlePresentation.RefillDropVisual(puzzle, instantiateMap);

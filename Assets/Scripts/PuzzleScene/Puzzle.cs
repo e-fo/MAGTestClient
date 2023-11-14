@@ -10,7 +10,7 @@ public class Puzzle : MonoBehaviour
     public TileConfig[] TileConfigs;
     public GameObject Prefab;
     public UnityAction<Vector2Int> InputHandler;
-    [NonSerialized] public TileStateValue[,] Table;
+    [NonSerialized] public TileStateValue[,] Grid;
     /// <summary>
     /// stores all reference type states of tiles in a map
     /// (key: GameObject InstanceId, Val: Reference type components)
@@ -21,7 +21,7 @@ public class Puzzle : MonoBehaviour
     {
         //initialize table
         {
-            Table = new TileStateValue[Width, Height];
+            Grid = new TileStateValue[Width, Height];
             float startX = transform.position.x;
             float startY = transform.position.y;
             InputHandler = new UnityAction<Vector2Int>(GetComponent<PuzzleInputHandler>().OnTapHandler);
@@ -37,7 +37,7 @@ public class Puzzle : MonoBehaviour
                         InputHandler
                         );
 
-                    Table[x, y] = tuple.Item1;
+                    Grid[x, y] = tuple.Item1;
                     TilesRefComponents.Add(tuple.Item1.GameObjectInstanceId, tuple.Item2);
                 }
             }

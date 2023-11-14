@@ -39,7 +39,7 @@ public static partial class PuzzleLogic
         var parent = puzzleState.transform;
         var prefab = puzzleState.Prefab;
         var input = puzzleState.InputHandler;
-        var grid = puzzleState.Table;
+        var grid = puzzleState.Grid;
         var refs = puzzleState.TilesRefComponents;
 
         for(int i=0; i<rows; ++i)

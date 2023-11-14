@@ -11,7 +11,7 @@ public class PuzzleInputHandler : MonoBehaviour
     private void OnEnable()
     {
         _puzzle = GetComponent<Puzzle>();
-        _grid = _puzzle.Table;
+        _grid = _puzzle.Grid;
 
         //finds all types which implmented IRuleTileTap
         Type[] types = null;
@@ -33,7 +33,7 @@ public class PuzzleInputHandler : MonoBehaviour
 
     public void OnTapHandler(Vector2Int pos)
     {
-        var typeGrid = PuzzleLogic.GetTypeGrid(_puzzle.Table);
+        var typeGrid = PuzzleLogic.GetTypeGrid(_puzzle.Grid);
         var cnf = _puzzle.TileConfigs.First(c=>c.GetInstanceID() == typeGrid[pos.x, pos.y]);
 
         for(int i=0; i<tapRules.Length; ++i) 

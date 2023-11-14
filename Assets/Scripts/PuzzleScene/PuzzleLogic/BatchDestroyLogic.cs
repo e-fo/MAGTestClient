@@ -12,7 +12,7 @@ public static partial class PuzzleLogic
         int rows = destroyMap.GetLength(0);
         int cols = destroyMap.GetLength(1);
         var refs = puzzleState.TilesRefComponents;
-        var grid = puzzleState.Table;
+        var grid = puzzleState.Grid;
 
         for (int i = 0; i < rows; i++)
             for (int j = 0; j < cols; j++)
@@ -20,7 +20,7 @@ public static partial class PuzzleLogic
                 int instanceId = destroyMap[i, j];
                 if (instanceId != TileStateValue.Empty.GameObjectInstanceId)
                 {
-                    puzzleState.Table[i, j] = TileStateValue.Empty;
+                    puzzleState.Grid[i, j] = TileStateValue.Empty;
                     Object.Destroy(puzzleState.TilesRefComponents[instanceId].Transform.gameObject);
                     puzzleState.TilesRefComponents.Remove(instanceId);
                 }

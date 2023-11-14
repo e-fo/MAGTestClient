@@ -16,7 +16,7 @@ public static partial class PuzzlePresentation
                 int drop = dropMap[i,j];
                 if (drop > 0)
                 {
-                    int id = puzzleState.Table[i,j].GameObjectInstanceId;
+                    int id = puzzleState.Grid[i,j].GameObjectInstanceId;
                     var t = puzzleState.TilesRefComponents[id].Transform;
                     
                     dropsAnim.Add(t.DOMoveY(t.position.y - drop, 0.2f).Play().AsyncWaitForCompletion());
