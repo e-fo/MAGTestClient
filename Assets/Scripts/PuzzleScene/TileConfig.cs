@@ -14,7 +14,7 @@ public struct GenerationRequirement
     public TileConfig GeneratedType;
 }
 
-[CreateAssetMenu(menuName ="ScriptableObject/Config/EntityConfig")]
+[CreateAssetMenu(menuName ="ScriptableObject/Config/Tile/TileConfig", order = 2)]
 public class TileConfig : ScriptableObject
 {
     [SerializeField] TileBaseType _baseType;            public TileBaseType BaseType => _baseType;

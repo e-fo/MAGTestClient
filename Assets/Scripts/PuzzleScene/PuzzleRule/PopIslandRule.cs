@@ -10,7 +10,7 @@ public struct PopIslandRule: IRuleTileTap
         puzzle.InputAvailable = false;
 
         var tile = puzzle.Grid[position.x, position.y];
-        var cnf = puzzle.TileConfigs.First(c=>c.GetInstanceID() == tile.SOEnumTypeInstanceId);
+        var cnf = puzzle.TileConfigs.List.First(c=>c.GetInstanceID() == tile.SOEnumTypeInstanceId);
 
         var go = puzzle.TilesRefComponents[tile.GameObjectInstanceId];
 
@@ -54,7 +54,7 @@ public struct PopIslandRule: IRuleTileTap
                 puzzle.InputHandler);
 
 
-            await PuzzlePresentation.AbsorbToNewTileVisual(puzzle, islandMap, tuple.Item2);
+            await PuzzlePresentation.AbsorbToNewTile(puzzle, islandMap, tuple.Item2);
 
             PuzzleLogic.DestroyTileBatch(puzzle, islandMap);
 

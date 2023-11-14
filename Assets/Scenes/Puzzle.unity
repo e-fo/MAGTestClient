@@ -155,11 +155,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Width: 7
   Height: 7
-  TileConfigs:
-  - {fileID: 11400000, guid: 8e25cf414385ecf4a9192615666b59fd, type: 2}
-  - {fileID: 11400000, guid: 67bc8d6820bd1c446ae5a9e28287b838, type: 2}
-  - {fileID: 11400000, guid: a237b60c21a5f9f499c95888ece56b7d, type: 2}
-  - {fileID: 11400000, guid: ba59b0995bf89634989d3462e6d4ddb2, type: 2}
+  InputAvailable: 1
+  TileConfigs: {fileID: 11400000, guid: abb7ababf70d22642b8d5516b11ea288, type: 2}
+  VisualConfigs: {fileID: 11400000, guid: 017a182a8d087034f8b9c6cbfb9d7fbb, type: 2}
   Prefab: {fileID: 8895665125546963322, guid: 3e8e5ba224f92cf459ade8059e3e69fe, type: 3}
 --- !u!4 &156010869
 Transform:

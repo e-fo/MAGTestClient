@@ -35,7 +35,7 @@ public static partial class PuzzleLogic
         int[,] ret = new int[rows, cols];
         ArrayUtil.Fill2D(ret, TileStateValue.Empty.GameObjectInstanceId);
 
-        var configs = puzzleState.TileConfigs;
+        var configs = puzzleState.TileConfigs.List;
         var parent = puzzleState.transform;
         var prefab = puzzleState.Prefab;
         var input = puzzleState.InputHandler;
