@@ -1,27 +1,26 @@
 using System.Threading.Tasks;
-using UnityEngine;
 using DG.Tweening;
 using System.Collections.Generic;
 
 public static partial class PuzzlePresentation
 {
-    public static async Task BatchDestroy(Puzzle puzzleState, Vector2Int[] islandIndices)
+    public static async Task BatchDestroyVisual(Puzzle puzzleState, int[,] destroyMap)
     {
-        TileStateRef[] shouldDestroy = new TileStateRef[islandIndices.Length];
-        for(int i=0; i< islandIndices.Length; ++i) 
-        {
-            var idx = islandIndices[i];
-            int instanceId = puzzleState.Table[idx.x, idx.y].GameObjectInstanceId;
-            shouldDestroy[i] = puzzleState.TilesRefComponents[instanceId]; 
-        }
-        List<Task> tweens = new(shouldDestroy.Length);
+        int rows = destroyMap.GetLength(0);
+        int cols = destroyMap.GetLength(1);
+        var refs = puzzleState.TilesRefComponents;
 
-        foreach(var t in shouldDestroy) {
-            var r = t.Transform.GetComponent<SpriteRenderer>();
-            var tween = r.DOFade(0, 0.2f);
-            tweens.Add(tween.Play().AsyncWaitForCompletion());
-        }
-
+        List<Task> tweens = new(ArrayUtil.CountNotEqual2D(destroyMap, TileStateValue.Empty.GameObjectInstanceId));
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+            {
+                int instanceId = destroyMap[i,j];
+                if(instanceId != TileStateValue.Empty.GameObjectInstanceId)
+                {
+                    var r = refs[instanceId].Renderer;
+                    tweens.Add(r.DOFade(0, 0.2f).Play().AsyncWaitForCompletion());
+                }
+            }
         await Task.WhenAll(tweens);
     }
 }

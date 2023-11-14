@@ -24,9 +24,11 @@ public struct TileStateValue
 /// </summary>
 public class TileStateRef
 {
-    public TileStateRef(Transform transform)
+    public TileStateRef(Transform transform, SpriteRenderer renderer)
     {
         Transform = transform;
+        Renderer = renderer;
     }
     public readonly Transform Transform;
+    public readonly SpriteRenderer Renderer;
 }

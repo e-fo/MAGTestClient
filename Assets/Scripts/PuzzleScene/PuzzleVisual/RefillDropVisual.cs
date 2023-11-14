@@ -5,17 +5,17 @@ using System.Threading.Tasks;
 
 public static partial class PuzzlePresentation
 {
-    public static async Task RefillDropVisual(Puzzle puzzleState, int[,] refillGrid)
+    public static async Task RefillDropVisual(Puzzle puzzleState, int[,] refillMap)
     {
-        int rows = refillGrid.GetLength(0);
-        int cols = refillGrid.GetLength(1);
+        int rows = refillMap.GetLength(0);
+        int cols = refillMap.GetLength(1);
 
         int deepestEmptyCell = 0;
         for (int i=0; i<rows; ++i)
             for (int j=0; j<cols; ++j)
             {
                 if(
-                    refillGrid[i,j] != TileStateValue.Empty.GameObjectInstanceId &&
+                    refillMap[i,j] != TileStateValue.Empty.GameObjectInstanceId &&
                     deepestEmptyCell < j)
                 {
                     deepestEmptyCell = j;
@@ -27,7 +27,7 @@ public static partial class PuzzlePresentation
         for(int i=0; i<rows; ++i) 
             for(int j=0; j<cols; ++j)
             {
-                int id = refillGrid[i,j];
+                int id = refillMap[i,j];
                 if (TileStateValue.Empty.SOEnumTypeInstanceId != id)
                 {
                     var t = refDict[id].Transform;

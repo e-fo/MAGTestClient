@@ -12,23 +12,33 @@ public struct PopIslandRule: IRuleTileTap
 
         var go = puzzle.TilesRefComponents[tile.GameObjectInstanceId];
 
-        Debug.Log($"You tapped on tile with position: {go.Transform.position}");
+        var islandMap = PuzzleLogic.GetIslandMap(puzzle.Table, position);
+        int islandLength = ArrayUtil.CountNotEqual2D(islandMap, TileStateValue.Empty.GameObjectInstanceId);
 
-        var islandIndicies = PuzzleLogic.GetIslandIndices(
-            PuzzleLogic.GetTypeGrid(puzzle.Table), 
-            position);
-
-        if(islandIndicies.Length > 1)
+        var orderedGenReqs = cnf.GenerationReqs.OrderBy(x=>x.NumberOfRequiredItem).ToArray();
+        
+        if(islandLength == 1)
         {
-            await PuzzlePresentation.BatchDestroy(puzzle, islandIndicies);
-            PuzzleLogic.BatchDestroyTilesUtil(puzzle, islandIndicies);
+            await PuzzlePresentation.TileShakeVisual(puzzle, position);
+        }
+        else if(islandLength > 1 && islandLength < orderedGenReqs[0].NumberOfRequiredItem)
+        {
+            await PuzzlePresentation.BatchDestroyVisual(puzzle, islandMap);
+            PuzzleLogic.DestroyTileBatch(puzzle, islandMap);
 
             var dropMap = PuzzleLogic.CalculateTilesDrop(PuzzleLogic.GetIdGrid(puzzle.Table));
             await PuzzlePresentation.TileDropVisual(puzzle, dropMap);
-            PuzzleLogic.ApplyTilesDrop(puzzle, dropMap);
+            PuzzleLogic.ApplyTilesDrop(ref puzzle.Table, dropMap);
 
-            var refillGrid = PuzzleLogic.GenerateRefillGrid(puzzle);
-            await PuzzlePresentation.RefillDropVisual(puzzle, refillGrid);
+            var refillTypeMap = PuzzleLogic.GenerateRefillMap(
+                PuzzleLogic.GetIdGrid(puzzle.Table),
+                puzzle.TileConfigs.Select(c => c.GetInstanceID()).ToArray());
+            var instantiateMap = PuzzleLogic.InstantiateTileBatch(puzzle, refillTypeMap);
+            await PuzzlePresentation.RefillDropVisual(puzzle, instantiateMap);
+        }
+        else if(islandLength > orderedGenReqs[0].NumberOfRequiredItem)
+        {
+
         }
     }
 }

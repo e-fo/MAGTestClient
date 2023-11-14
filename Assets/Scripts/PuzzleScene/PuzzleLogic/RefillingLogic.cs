@@ -3,41 +3,28 @@ using UnityEngine;
 public static partial class PuzzleLogic
 {
     /// <summary>
-    /// Genearates another tile's grid on top of current grid
+    /// 
     /// </summary>
-    /// <param name="puzzleState"></param>
-    /// <returns>Generated tile's grid. Each cell contains instanceId of new tile which should be fill empty cell</returns>
-    public static int[,] GenerateRefillGrid(Puzzle puzzleState)
+    /// <param name="idGrid"></param>
+    /// <param name="configs">list of instanceId of scriptable object configs</param>
+    /// <returns>returns same size 2d map as grid. each element contains config instanceId (type) of new generataed tile. other elementes are Empty</returns>
+    public static int[,] GenerateRefillMap(in int[,] idGrid, in int[] configs)
     {
-        int rows = puzzleState.Table.GetLength(0);
-        int cols = puzzleState.Table.GetLength(1);
-        var grid = puzzleState.Table;
-        var configs = puzzleState.TileConfigs;
+        int rows = idGrid.GetLength(0);
+        int cols = idGrid.GetLength(1);
 
-        int[,] refillGrid = new int[rows, cols];
+        int[,] ret = new int[rows, cols];
+        ArrayUtil.Fill2D(ret, TileStateValue.Empty.SOEnumTypeInstanceId);
 
         for(int j=0; j<cols; ++j)
-        {
-            for(int i=0; i<rows; ++i) {
-                refillGrid[i, j] = TileStateValue.Empty.SOEnumTypeInstanceId;
-                if(grid[i,j].GameObjectInstanceId == TileStateValue.Empty.GameObjectInstanceId)
+            for(int i=0; i<rows; ++i) 
+            {
+                if(idGrid[i,j] == TileStateValue.Empty.GameObjectInstanceId)
                 {
-                    var cnf = configs[UnityEngine.Random.Range(0, configs.Length-1)];
-                    var tuple = InstantiateTile(
-                        puzzleState.Prefab,
-                        cnf,
-                        puzzleState.transform,
-                        new Vector2Int(i, j),
-                        puzzleState.InputHandler);
-
-                    puzzleState.Table[i, j] = tuple.Item1;
-                    puzzleState.TilesRefComponents.Add(tuple.Item1.GameObjectInstanceId, tuple.Item2);
-
-                    refillGrid[i, j] = tuple.Item1.GameObjectInstanceId;
+                    ret[i,j] = configs[Random.Range(0, configs.Length-1)];
                 }
             }
-        }
 
-        return refillGrid;
+        return ret;
     }
 }
