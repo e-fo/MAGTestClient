@@ -159,6 +159,7 @@ MonoBehaviour:
   TileConfigs: {fileID: 11400000, guid: abb7ababf70d22642b8d5516b11ea288, type: 2}
   VisualConfigs: {fileID: 11400000, guid: 017a182a8d087034f8b9c6cbfb9d7fbb, type: 2}
   Prefab: {fileID: 8895665125546963322, guid: 3e8e5ba224f92cf459ade8059e3e69fe, type: 3}
+  level: {fileID: 11400000, guid: 85724d757b1da004693895920ab96c96, type: 2}
 --- !u!4 &156010869
 Transform:
   m_ObjectHideFlags: 0
