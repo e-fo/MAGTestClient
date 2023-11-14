@@ -23,19 +23,18 @@ public class Puzzle : MonoBehaviour
     {
         //initialize table
         {
-            Grid = new TileStateValue[level.Rows, level.Cols];
+            Grid = new TileStateValue[level.RowsCount, level.ColsCount];
             float startX = transform.position.x;
             float startY = transform.position.y;
             InputHandler = new UnityAction<Vector2Int>(GetComponent<PuzzleInputHandler>().OnTapHandler);
             var confs = TileConfigs.List;
-            for (int x = 0; x < level.Rows; ++x)
+            for (int x = 0; x < level.RowsCount; ++x)
             {
-                for (int y = 0; y < level.Cols; ++y)
+                for (int y = 0; y < level.ColsCount; ++y)
                 {
                     var tuple = PuzzleLogic.InstantiateTile(
                         Prefab,
-                        //confs[UnityEngine.Random.Range(0, confs.Count)],
-                        level[x,y],
+                        level[x, level.ColsCount -1 - y], //sync initial level data grid view with Unity coordination
                         transform,
                         new Vector2(startX + x, startY + y),
                         InputHandler
