@@ -16,7 +16,7 @@ public static class ArrayUtil
         }
     }
 
-    public static int CountNotEqual2D<T>(T[,] array, T value)
+    public static int CountNotEqual2D<T>(in T[,] array, T value)
     {
         int ret = 0;
         
@@ -27,7 +27,7 @@ public static class ArrayUtil
         {
             for (int j = 0; j < cols; j++)
             {
-                if(!EqualityComparer<T>.Default.Equals(array[i, j], value)) ret++;
+                if(EqualityComparer<T>.Default.Equals(array[i, j], value)) ret++;
             }
         }
 
