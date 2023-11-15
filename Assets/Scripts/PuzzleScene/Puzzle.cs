@@ -11,7 +11,7 @@ public class Puzzle : MonoBehaviour
     public GameObject Prefab;
     public UnityAction<Vector2Int> InputHandler;
     [NonSerialized] public TileStateValue[,] Grid;
-    [SerializeField] private LevelDataList _levelList;
+    [SerializeField] private LevelConfigList _levelList;
     [SerializeField] private IntVariable _currentLvlIdx;
 
     /// <summary>

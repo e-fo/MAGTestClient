@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class LevelSelectionPanel : MonoBehaviour
 {
-    [SerializeField] LevelDataList _levelList;
+    [SerializeField] LevelConfigList _levelList;
     [SerializeField] GridLayoutGroup _lvlButtonGridLayout;
     [SerializeField] Button _levelButtonPrefab;
     [SerializeField] Button _rightButton;
