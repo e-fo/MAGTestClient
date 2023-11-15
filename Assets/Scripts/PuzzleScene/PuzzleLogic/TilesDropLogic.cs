@@ -15,19 +15,15 @@ public static partial class PuzzleLogic
         for (int i = 0; i < rows; ++i)
         {
             int dropCounter = 0;
-            bool isPreviousEmpty = false;
             for (int j = 0; j <cols; ++j)
             {
                 if(idGrid[i,j] == TileStateValue.Empty.GameObjectInstanceId)
                 {
-                    if(!isPreviousEmpty) dropCounter = 0;
                     dropCounter++;
-                    isPreviousEmpty = true;
                 }
                 else
                 {
                     ret[i,j] = dropCounter;
-                    isPreviousEmpty = false;
                 }
             }
         }
