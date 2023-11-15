@@ -6,9 +6,12 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "ScriptableObject/Config/PuzzleVisual/AbsorbToNewTileVisual", order = 2)]
 public class AbsorbToNewTileVisual : VisualConfigBase
 {
-    [SerializeField] float _islandAbsorbDuration = 0.2f;            public float IslandAbsorbDuration => _islandAbsorbDuration;
-    [SerializeField] float _delayUntilNewTileStartAppearing = 0.1f; public float DelayUntilNewTileStartAppearing => _delayUntilNewTileStartAppearing;
-    [SerializeField] float _newTileAppearDuration = 0.2f;           public float NewTileAppearDuration => _newTileAppearDuration;
+    [SerializeField] 
+    float _islandAbsorbDuration = 0.2f;            public float IslandAbsorbDuration => _islandAbsorbDuration;
+    [SerializeField] 
+    float _delayUntilNewTileStartAppearing = 0.1f; public float DelayUntilNewTileStartAppearing => _delayUntilNewTileStartAppearing;
+    [SerializeField] 
+    float _newTileAppearDuration = 0.2f;           public float NewTileAppearDuration => _newTileAppearDuration;
 }
 
 public static partial class PuzzlePresentation

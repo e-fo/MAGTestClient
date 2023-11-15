@@ -3,10 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 
+[CreateAssetMenu(menuName = "ScriptableObject/Config/PuzzleVisual/RefillDropVisual", order = 2)]
+public class RefillDropVisual: VisualConfigBase
+{
+    [SerializeField]
+    float _dropDuration = 0.2f; public float DropDuration => _dropDuration;
+}
+
 public static partial class PuzzlePresentation
 {
     public static async Task RefillDropVisual(Puzzle puzzleState, int[,] refillMap)
     {
+        var visualConf = puzzleState.VisualConfigs.Get<RefillDropVisual>();
+
         int rows = refillMap.GetLength(0);
         int cols = refillMap.GetLength(1);
 
@@ -32,7 +41,9 @@ public static partial class PuzzlePresentation
                 {
                     var t = refDict[id].Transform;
                     t.position = new Vector3(i,j+deepestEmptyCell,0);
-                    dropAnims.Add(t.DOMoveY(t.position.y - deepestEmptyCell, 0.2f).Play().AsyncWaitForCompletion());
+                    dropAnims.Add(t.DOMoveY(t.position.y - deepestEmptyCell, visualConf.DropDuration)
+                        .Play()
+                        .AsyncWaitForCompletion());
                 }
             }
 
