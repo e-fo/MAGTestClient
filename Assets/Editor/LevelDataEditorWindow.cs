@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class LevelDataEditorWindow : EditorWindow
 {
-    private LevelData levelData;
+    private LevelConfig levelData;
     private int numRows = 5;
     private int numCols = 5;
 
@@ -14,9 +14,9 @@ public class LevelDataEditorWindow : EditorWindow
 
     private void OnEnable()
     {
-        if (Selection.activeObject is LevelData)
+        if (Selection.activeObject is LevelConfig)
         {
-            levelData = (LevelData)Selection.activeObject;
+            levelData = (LevelConfig)Selection.activeObject;
             if(levelData != null)
             {
                 numRows = levelData.RowsCount;

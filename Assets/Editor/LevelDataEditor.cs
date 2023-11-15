@@ -1,12 +1,12 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(LevelData))]
+[CustomEditor(typeof(LevelConfig))]
 public class LevelDataEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        LevelData levelData = (LevelData)target;
+        LevelConfig levelData = (LevelConfig)target;
 
         if (GUILayout.Button("Open Level Editor Window"))
         {
