@@ -1,0 +1,18 @@
+{
+    "name": "LevelSelection",
+    "rootNamespace": "",
+    "references": [
+        "GUID:228dc3df298f08a498f1b9f7626b4f79",
+        "GUID:1cb7875bcbc4b484daf53fee3e3b97d4",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
