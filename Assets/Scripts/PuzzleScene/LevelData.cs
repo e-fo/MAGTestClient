@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "ScriptableObject/Config/LevelData")]
+[CreateAssetMenu(menuName = "ScriptableObject/Config/Level/LevelData", order = 2)]
 public class LevelData : ScriptableObject
 {
     [Serializable] public class TileList { public TileConfig[] Rows; }

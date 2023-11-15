@@ -2,7 +2,8 @@
     "name": "PuzzleScene",
     "rootNamespace": "",
     "references": [
-        "GUID:1cb7875bcbc4b484daf53fee3e3b97d4"
+        "GUID:1cb7875bcbc4b484daf53fee3e3b97d4",
+        "GUID:228dc3df298f08a498f1b9f7626b4f79"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -11,7 +11,7 @@ public class Puzzle : MonoBehaviour
     public GameObject Prefab;
     public UnityAction<Vector2Int> InputHandler;
     [NonSerialized] public TileStateValue[,] Grid;
-    [SerializeField] private LevelData level;
+    [SerializeField] private LevelDataList _levelList;
 
     /// <summary>
     /// stores all reference type states of tiles in a map
@@ -23,6 +23,7 @@ public class Puzzle : MonoBehaviour
     {
         //initialize table
         {
+            var level = _levelList.List[0];
             Grid = new TileStateValue[level.RowsCount, level.ColsCount];
             float startX = transform.position.x;
             float startY = transform.position.y;
