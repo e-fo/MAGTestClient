@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -27,7 +26,7 @@ public class Puzzle : MonoBehaviour
         var level = _levelList.List[_currentLvlIdx.Value];
         int rows = level.RowsCount;
         int cols = level.ColsCount;
-        //initialize table
+        //initialize grid
         {
             Grid = new TileStateValue[rows, cols];
             float startX = transform.position.x;

@@ -10,13 +10,19 @@ public struct PopIslandRule: IRuleTileTap
         puzzle.InputAvailable = false;
 
         var tile = puzzle.Grid[position.x, position.y];
-        var cnf = puzzle.TileConfigs.List.First(c=>c.GetInstanceID() == tile.SOEnumTypeInstanceId);
+        var grid = puzzle.Grid;
+        int typeDefault = TileStateValue.Empty.SOEnumTypeInstanceId;
 
-        var go = puzzle.TilesRefComponents[tile.GameObjectInstanceId];
-
-        var islandMap = PuzzleLogic.GetIslandMap(puzzle.Grid, position);
+        var islandMap = ArrayUtil.GetIslandMap(PuzzleLogic.GetTypeGrid(grid), 
+            position, 
+            typeDefault);
+        ArrayUtil.ReplaceNotDefaultElements(ref islandMap, 
+            PuzzleLogic.GetIdGrid(grid), 
+            typeDefault);
         int islandLength = ArrayUtil.CountNotEqual2D(islandMap, TileStateValue.Empty.GameObjectInstanceId);
 
+
+        var cnf = puzzle.TileConfigs.List.First(c=>c.GetInstanceID() == tile.SOEnumTypeInstanceId);
         var orderedGenReqs = cnf.GenerationReqs.OrderBy(x=>x.NumberOfRequiredItem).ToArray();
         
         if(islandLength == 1)
@@ -32,7 +38,6 @@ public struct PopIslandRule: IRuleTileTap
 
 
             await ReusableRule.DropRule(puzzle, position);
-
             await ReusableRule.Refill(puzzle, position);
         }
         else if(islandLength >= orderedGenReqs[0].NumberOfRequiredItem)
@@ -62,7 +67,6 @@ public struct PopIslandRule: IRuleTileTap
             puzzle.TilesRefComponents.Add(tuple.Item1.GameObjectInstanceId, tuple.Item2);
 
             await ReusableRule.DropRule(puzzle, position);
-
             await ReusableRule.Refill(puzzle, position);
         }
         
