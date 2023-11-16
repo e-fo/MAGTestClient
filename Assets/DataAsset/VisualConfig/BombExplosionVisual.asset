@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da6da2fdb8cd076479323b332a7d475b, type: 3}
   m_Name: BombExplosionVisual
   m_EditorClassIdentifier: 
-  _delayBetweenExplosionLayers: 0.1
-  _destroyDuration: 0.3
+  _delayBetweenExplosionLayers: 0.2
+  _destroyDuration: 0.6
   _cameraShakeDuration: 0.3
   _cameraShakeStrength: 10

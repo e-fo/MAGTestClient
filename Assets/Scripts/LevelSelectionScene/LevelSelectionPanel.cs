@@ -76,6 +76,6 @@ public class LevelSelectionPanel : MonoBehaviour
             }
         }
 
-        _pageRangeTxt.text = $"{_startIdx}-{end}";
+        _pageRangeTxt.text = $"{_startIdx}-{end-1}";
     }
 }
