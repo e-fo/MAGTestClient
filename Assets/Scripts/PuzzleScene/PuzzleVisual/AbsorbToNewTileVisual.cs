@@ -9,7 +9,7 @@ public class AbsorbToNewTileVisual : VisualConfigBase
     [SerializeField] 
     float _islandAbsorbDuration = 0.2f;            public float IslandAbsorbDuration => _islandAbsorbDuration;
     [SerializeField] 
-    float _delayUntilNewTileStartAppearing = 0.1f; public float DelayUntilNewTileStartAppearing => _delayUntilNewTileStartAppearing;
+    float _delayForNewTileStartAppearing = 0.1f; public float DelayForNewTileStartAppearing => _delayForNewTileStartAppearing;
     [SerializeField] 
     float _newTileAppearDuration = 0.2f;           public float NewTileAppearDuration => _newTileAppearDuration;
 }
@@ -29,8 +29,8 @@ public static partial class PuzzlePresentation
         newTile.Renderer.color = new UnityEngine.Color(color.r, color.g, color.b, 0);
 
         List<Task> tweens = new(ArrayUtil.CountNotEqual2D(destroyMap, TileStateValue.Empty.GameObjectInstanceId) + 1);
-        for (int i = 0; i < rows; i++)
-            for (int j = 0; j < cols; j++)
+        for (int i = 0; i < rows; ++i)
+            for (int j = 0; j < cols; ++j)
             {
                 int instanceId = destroyMap[i,j];
                 if(instanceId != TileStateValue.Empty.GameObjectInstanceId)
@@ -42,7 +42,7 @@ public static partial class PuzzlePresentation
                 }
             }
 
-        await Task.Delay(Mathf.RoundToInt(visualConf.DelayUntilNewTileStartAppearing*1000));
+        await Task.Delay(Mathf.RoundToInt(visualConf.DelayForNewTileStartAppearing*1000));
 
         await newTile.Renderer.DOFade(1, visualConf.NewTileAppearDuration).Play().AsyncWaitForCompletion();
     }
