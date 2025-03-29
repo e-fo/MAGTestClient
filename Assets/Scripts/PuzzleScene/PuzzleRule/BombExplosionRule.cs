@@ -1,13 +1,12 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class BombExplosionRule : IRuleTileTap
+public struct BombExplosionRule : IRuleTileTap
 {
-    public TileBaseType[] AcceptedBaseTypes => new TileBaseType[]{ TileBaseType.Bomb };
+    public readonly TileBaseType[] AcceptedBaseTypes => new TileBaseType[]{ TileBaseType.Bomb };
 
-    public async void Execute(Vector2Int position, Puzzle puzzle)
+    public async UniTask Execute(Vector2Int position, Puzzle puzzle)
     {
-        puzzle.InputAvailable = false;
-
         var grid = puzzle.Grid;
         int typeDefault = TileStateValue.Empty.SOEnumTypeInstanceId;
 
@@ -38,7 +37,5 @@ public class BombExplosionRule : IRuleTileTap
 
         await ReusableRule.DropRule(puzzle, position);
         await ReusableRule.Refill(puzzle, position);
-
-        puzzle.InputAvailable = true;
     }
 }

@@ -1,14 +1,13 @@
+using Cysharp.Threading.Tasks;
 using System.Linq;
 using UnityEngine;
 
 public struct PopIslandRule: IRuleTileTap
 {
-    public TileBaseType[] AcceptedBaseTypes => new TileBaseType[]{TileBaseType.Simple};
+    public readonly TileBaseType[] AcceptedBaseTypes => new TileBaseType[]{TileBaseType.Simple};
 
-    public async void Execute(Vector2Int position, Puzzle puzzle)
+    public async UniTask Execute(Vector2Int position, Puzzle puzzle)
     {
-        puzzle.InputAvailable = false;
-
         var tile = puzzle.Grid[position.x, position.y];
         var grid = puzzle.Grid;
         int typeDefault = TileStateValue.Empty.SOEnumTypeInstanceId;
@@ -43,21 +42,15 @@ public struct PopIslandRule: IRuleTileTap
         else if(islandLength >= orderedGenReqs[0].NumberOfRequiredItem)
         {
             TileConfig shouldGenerateConf = null;
-            for(int x=0; x<orderedGenReqs.Length; ++x) 
+            for(int x=0; x<orderedGenReqs.Length; ++x)
             {
                 if(islandLength >= orderedGenReqs[x].NumberOfRequiredItem)
                 {
                     shouldGenerateConf = orderedGenReqs[x].GeneratedType;
                 }
             }
-
-            var tuple = PuzzleLogic.InstantiateTile(
-                puzzle.Prefab, 
-                shouldGenerateConf,
-                puzzle.transform,
-                position,
-                puzzle.InputHandler);
-
+            
+            var tuple = puzzle.InstantiateTile(shouldGenerateConf, position);
 
             await PuzzlePresentation.AbsorbToNewTile(puzzle, islandMap, tuple.Item2);
 
@@ -69,7 +62,5 @@ public struct PopIslandRule: IRuleTileTap
             await ReusableRule.DropRule(puzzle, position);
             await ReusableRule.Refill(puzzle, position);
         }
-        
-        puzzle.InputAvailable = true;
     }
 }
