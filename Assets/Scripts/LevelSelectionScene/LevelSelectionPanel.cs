@@ -2,7 +2,6 @@ using Cysharp.Threading.Tasks;
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LevelSelectionPanel : MonoBehaviour
@@ -46,7 +45,6 @@ public class LevelSelectionPanel : MonoBehaviour
     private void LevelButton_OnClicked(int levelNum)
     {
         _selectedLevel = levelNum;
-        SceneManager.LoadScene(1);
     }
 
     private void ChangePageButton_OnClicked(bool next)

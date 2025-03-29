@@ -8,7 +8,7 @@ public static class UnityEngineUtil
         bool isLoaded = false;
         void setFlag(Scene scene, LoadSceneMode mode) => isLoaded = true;
         SceneManager.sceneLoaded += setFlag;
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(idx);
         while( !isLoaded )
         {
             await UniTask.WaitForSeconds( 0.1f );

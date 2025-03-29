@@ -280,6 +280,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _puzzleController: {fileID: 156010868}
   _levelList: {fileID: 11400000, guid: 5e82003abc2b6cd4aac1e85fa0c60487, type: 2}
+  _puzzleUI: {fileID: 421672444942508567}
 --- !u!20 &813327257 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 1997953900024324274, guid: 2e31b4a1d82b56d43aced7d5ed54221b, type: 3}
@@ -576,6 +577,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 421672444672786579, guid: 154c93bed3fc7a243bbcf10f2ee8dabc, type: 3}
   m_PrefabInstance: {fileID: 421672444942508565}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &421672444942508567 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1880400519, guid: 154c93bed3fc7a243bbcf10f2ee8dabc, type: 3}
+  m_PrefabInstance: {fileID: 421672444942508565}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4b1f45db475a4d418ec9ed950181134, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

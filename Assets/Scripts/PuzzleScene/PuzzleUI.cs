@@ -1,15 +1,11 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PuzzleUI : MonoBehaviour
 {
     [SerializeField] Button _restartButton;
-    [SerializeField] Button _lvlSelectionButton;
+    public Button RestartButton => _restartButton;
 
-    private void Awake()
-    {
-        _restartButton.onClick.AddListener(()=>SceneManager.LoadScene(1));
-        _lvlSelectionButton.onClick.AddListener(()=>SceneManager.LoadScene(0));
-    }
+    [SerializeField] Button _lvlSelectionButton;
+    public Button LvlSelectionButton => _lvlSelectionButton;
 }

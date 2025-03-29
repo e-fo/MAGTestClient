@@ -7,4 +7,7 @@ public class PuzzleSceneData : MonoBehaviour
 
     [SerializeField] LevelConfigList _levelList;
     public LevelConfigList LevelList => _levelList;
+
+    [SerializeField] PuzzleUI _puzzleUI;
+    public PuzzleUI PuzzleUI => _puzzleUI;
 }

@@ -15,8 +15,10 @@ public class PuzzleState : IState
     private Puzzle _puzzleController;
     IRuleTileTap[] _tapRules = null;
 
-    public UniTask OnEnter()
+    public async UniTask OnEnter()
     {
+        await UnityEngineUtil.LoadSceneWithIndex(1);
+
         _sceneData = GameObject.FindObjectOfType<PuzzleSceneData>();
         _puzzleController = _sceneData.PuzzleController;
 
@@ -45,8 +47,18 @@ public class PuzzleState : IState
             var level = _sceneData.LevelList.List[_selectedLevel];
             _puzzleController.InitPuzzle(level);
         }
+
+        //init UI
+        {
+            _sceneData.PuzzleUI.RestartButton.onClick.AddListener(
+                () => GameManager.MainStateMachine.SwitchState(new PuzzleState(_selectedLevel))
+            );
+            _sceneData.PuzzleUI.LvlSelectionButton.onClick.AddListener(
+                () => GameManager.MainStateMachine.SwitchState(new LevelSelectionState())
+            );
+        }
+
         RunGame().Forget();
-        return UniTask.CompletedTask;
     }
 
     public void OnUpdate() { }
