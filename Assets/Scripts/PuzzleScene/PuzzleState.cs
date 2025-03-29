@@ -5,18 +5,15 @@ using UnityEngine;
 
 public class PuzzleState : IState
 {
-    public PuzzleState(int selectedLevel)
-    {
-        _selectedLevel = selectedLevel;
-    }
-
-    private readonly int _selectedLevel;
     private PuzzleSceneData _sceneData;
     private Puzzle _puzzleController;
     IRuleTileTap[] _tapRules = null;
+    private int _selectedLevel;
 
-    public async UniTask OnEnter()
+    public async UniTask OnEnter(object arg)
     {
+        _selectedLevel = (int)arg;
+
         await UnityEngineUtil.LoadSceneWithIndex(1);
 
         _sceneData = GameObject.FindObjectOfType<PuzzleSceneData>();
@@ -51,10 +48,10 @@ public class PuzzleState : IState
         //init UI
         {
             _sceneData.PuzzleUI.RestartButton.onClick.AddListener(
-                () => GameManager.MainStateMachine.SwitchState(new PuzzleState(_selectedLevel))
+                () => GameManager.MainStateMachine.SwitchState(StateEnum.PuzzleState, _selectedLevel)
             );
             _sceneData.PuzzleUI.LvlSelectionButton.onClick.AddListener(
-                () => GameManager.MainStateMachine.SwitchState(new LevelSelectionState())
+                () => GameManager.MainStateMachine.SwitchState(StateEnum.LevelSelectionState)
             );
         }
 

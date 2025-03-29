@@ -6,7 +6,7 @@ public class LevelSelectionState : IState
 {
     LevelSelectionSceneData _sceneData;
 
-    public async UniTask OnEnter()
+    public async UniTask OnEnter(object arg)
     {
         if( SceneManager.GetActiveScene().buildIndex != 0 )
         {
@@ -17,7 +17,7 @@ public class LevelSelectionState : IState
 
         int selectetLevel = await _sceneData.LevelSelectionPanel.GetSelectedLevel();
 
-        GameManager.MainStateMachine.SwitchState(new PuzzleState(selectetLevel));
+        GameManager.MainStateMachine.SwitchState(StateEnum.PuzzleState, selectetLevel);
     }
 
     public void OnUpdate(){}

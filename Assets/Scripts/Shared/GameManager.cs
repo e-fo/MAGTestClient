@@ -11,7 +11,8 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
 
-            MainStateMachine = new StateMachine(new InitState());
+            MainStateMachine = new StateMachine();
+
             DontDestroyOnLoad(this.gameObject);
         } else
         {
