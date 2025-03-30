@@ -11,7 +11,7 @@ public static class UnityEngineUtil
         SceneManager.LoadScene(idx);
         while( !isLoaded )
         {
-            await UniTask.WaitForSeconds( 0.1f );
+            await UniTask.Yield();
         }
         SceneManager.sceneLoaded -= setFlag;
     }

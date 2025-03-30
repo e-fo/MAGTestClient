@@ -12,6 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2199b54664f5cec4591df581d5c19210, type: 3}
   m_Name: Level_00003
   m_EditorClassIdentifier: 
+  _totalMove: 25
+  _goals:
+  - goalType: 0
+    count: 70
+    tileConfig: {fileID: 0}
+    tileBaseType: 0
+  - goalType: 2
+    count: 10
+    tileConfig: {fileID: 11400000, guid: f7152975964e7b54c8be50b306c9c3b5, type: 2}
+    tileBaseType: 1
+  - goalType: 2
+    count: 30
+    tileConfig: {fileID: 11400000, guid: 67bc8d6820bd1c446ae5a9e28287b838, type: 2}
+    tileBaseType: 1
   Columns:
   - Rows:
     - {fileID: 11400000, guid: 8e25cf414385ecf4a9192615666b59fd, type: 2}
