@@ -23,7 +23,7 @@ MonoBehaviour:
     tileConfig: {fileID: 11400000, guid: f7152975964e7b54c8be50b306c9c3b5, type: 2}
     tileBaseType: 1
   - goalType: 2
-    count: 30
+    count: 20
     tileConfig: {fileID: 11400000, guid: 67bc8d6820bd1c446ae5a9e28287b838, type: 2}
     tileBaseType: 1
   Columns:
