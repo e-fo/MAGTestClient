@@ -16,7 +16,7 @@ public class InitState : IState
             GameManager.MainStateMachine.SwitchState(StateEnum.LevelSelectionState);
             break;
             case 1:
-            GameManager.MainStateMachine.SwitchState(StateEnum.PuzzleState);
+            GameManager.MainStateMachine.SwitchState(StateEnum.PuzzleState, 0);
             break;
         }
         return UniTask.CompletedTask;

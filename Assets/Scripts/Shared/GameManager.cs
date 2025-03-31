@@ -35,6 +35,11 @@ public class GameManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        MainStateMachine.OnFinished();
+        if( this == Instance )
+        {
+            MainStateMachine.OnFinished();
+            MainStateMachine = null;
+            GameManager.Instance = null;
+        }
     }
 }
