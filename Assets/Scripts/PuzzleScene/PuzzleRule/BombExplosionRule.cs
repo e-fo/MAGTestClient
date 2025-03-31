@@ -1,14 +1,13 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class BombExplosionRule : IRuleTileTap
+public struct BombExplosionRule : IRuleTileTap
 {
-    public TileBaseType[] AcceptedBaseTypes => new TileBaseType[]{ TileBaseType.Bomb };
+    public readonly TileBaseType[] AcceptedBaseTypes => new TileBaseType[]{ TileBaseType.Bomb };
 
-    public async void Execute(Vector2Int position, Puzzle puzzle)
+    public async UniTask Execute(Vector2Int position, PuzzleSceneData sceneData)
     {
-        puzzle.InputAvailable = false;
-
-        var grid = puzzle.Grid;
+        var grid = sceneData.PuzzleController.Grid;
         int typeDefault = TileStateValue.Empty.SOEnumTypeInstanceId;
 
         var islandMap = ArrayUtil.GetIslandMap(PuzzleLogic.GetTypeGrid(grid), 
@@ -21,7 +20,7 @@ public class BombExplosionRule : IRuleTileTap
 
         if(islandLength > 1)
         {
-            await PuzzlePresentation.AbsorbToBomb(puzzle, islandMap, position);
+            await PuzzlePresentation.AbsorbToBomb(sceneData.PuzzleController, islandMap, position);
         }
 
         int explosionLevel = (islandLength<3)?islandLength:Mathf.Max(grid.GetLength(0), grid.GetLength(1));
@@ -31,14 +30,13 @@ public class BombExplosionRule : IRuleTileTap
             explosionLevel,
             TileStateValue.Empty.GameObjectInstanceId);
 
-        await PuzzlePresentation.BombExplosion(puzzle, position, explosionLevel, destroyMap);
+        await PuzzlePresentation.BombExplosion(sceneData.PuzzleController, position, explosionLevel, destroyMap);
 
         destroyMap[position.x, position.y] = grid[position.x, position.y].GameObjectInstanceId;
-        PuzzleLogic.DestroyTileBatch(puzzle, destroyMap);
+        await ReusableRule.UpdateGoalRule(sceneData, destroyMap);
+        PuzzleLogic.DestroyTileBatch(sceneData.PuzzleController, destroyMap);
 
-        await ReusableRule.DropRule(puzzle, position);
-        await ReusableRule.Refill(puzzle, position);
-
-        puzzle.InputAvailable = true;
+        await ReusableRule.DropRule(sceneData.PuzzleController, position);
+        await ReusableRule.Refill(sceneData.PuzzleController, position);
     }
 }

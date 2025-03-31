@@ -8,9 +8,10 @@ public static partial class ReusableRule
     {
         var refillTypeMap = PuzzleLogic.GenerateRefillMap(
             PuzzleLogic.GetIdGrid(puzzle.Grid),
-            puzzle.TileConfigs.List.Select(c => c.GetInstanceID()).ToArray());
+            puzzle.TileConfigs.List.Select(c => c.GetInstanceID()).ToArray()
+            );
 
-        var instantiateMap = PuzzleLogic.InstantiateTileBatch(puzzle, refillTypeMap);
+        var instantiateMap = puzzle.InstantiateTileBatch(puzzle, refillTypeMap);
         await PuzzlePresentation.RefillDropVisual(puzzle, instantiateMap);
     }
 }

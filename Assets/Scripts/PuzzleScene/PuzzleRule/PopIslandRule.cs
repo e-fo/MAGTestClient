@@ -1,16 +1,15 @@
+using Cysharp.Threading.Tasks;
 using System.Linq;
 using UnityEngine;
 
 public struct PopIslandRule: IRuleTileTap
 {
-    public TileBaseType[] AcceptedBaseTypes => new TileBaseType[]{TileBaseType.Simple};
+    public readonly TileBaseType[] AcceptedBaseTypes => new TileBaseType[]{TileBaseType.Simple};
 
-    public async void Execute(Vector2Int position, Puzzle puzzle)
+    public async UniTask Execute(Vector2Int position, PuzzleSceneData sceneData)
     {
-        puzzle.InputAvailable = false;
-
-        var tile = puzzle.Grid[position.x, position.y];
-        var grid = puzzle.Grid;
+        var tile = sceneData.PuzzleController.Grid[position.x, position.y];
+        var grid = sceneData.PuzzleController.Grid;
         int typeDefault = TileStateValue.Empty.SOEnumTypeInstanceId;
 
         var islandMap = ArrayUtil.GetIslandMap(PuzzleLogic.GetTypeGrid(grid), 
@@ -22,54 +21,47 @@ public struct PopIslandRule: IRuleTileTap
         int islandLength = ArrayUtil.CountNotEqual2D(islandMap, TileStateValue.Empty.GameObjectInstanceId);
 
 
-        var cnf = puzzle.TileConfigs.List.First(c=>c.GetInstanceID() == tile.SOEnumTypeInstanceId);
+        var cnf = sceneData.PuzzleController.TileConfigs.List.First(c=>c.GetInstanceID() == tile.SOEnumTypeInstanceId);
         var orderedGenReqs = cnf.GenerationReqs.OrderBy(x=>x.NumberOfRequiredItem).ToArray();
         
         if(islandLength == 1)
         {
-            await PuzzlePresentation.TileShakeVisual(puzzle, position);
+            await PuzzlePresentation.TileShakeVisual(sceneData.PuzzleController, position);
         }
         else if(
             islandLength > 1 && 
             (orderedGenReqs.Length == 0 || islandLength < orderedGenReqs[0].NumberOfRequiredItem))
         {
-            await PuzzlePresentation.BatchDestroyVisual(puzzle, islandMap);
-            PuzzleLogic.DestroyTileBatch(puzzle, islandMap);
+            await ReusableRule.UpdateGoalRule(sceneData, islandMap);
+            await PuzzlePresentation.BatchDestroyVisual(sceneData.PuzzleController, islandMap);
+            PuzzleLogic.DestroyTileBatch(sceneData.PuzzleController, islandMap);
 
 
-            await ReusableRule.DropRule(puzzle, position);
-            await ReusableRule.Refill(puzzle, position);
+            await ReusableRule.DropRule(sceneData.PuzzleController, position);
+            await ReusableRule.Refill(sceneData.PuzzleController, position);
         }
         else if(islandLength >= orderedGenReqs[0].NumberOfRequiredItem)
         {
             TileConfig shouldGenerateConf = null;
-            for(int x=0; x<orderedGenReqs.Length; ++x) 
+            for(int x=0; x<orderedGenReqs.Length; ++x)
             {
                 if(islandLength >= orderedGenReqs[x].NumberOfRequiredItem)
                 {
                     shouldGenerateConf = orderedGenReqs[x].GeneratedType;
                 }
             }
+            
+            var tuple = sceneData.PuzzleController.InstantiateTile(shouldGenerateConf, position);
 
-            var tuple = PuzzleLogic.InstantiateTile(
-                puzzle.Prefab, 
-                shouldGenerateConf,
-                puzzle.transform,
-                position,
-                puzzle.InputHandler);
+            await PuzzlePresentation.AbsorbToNewTile(sceneData.PuzzleController, islandMap, tuple.Item2);
+            await ReusableRule.UpdateGoalRule(sceneData, islandMap);
+            PuzzleLogic.DestroyTileBatch(sceneData.PuzzleController, islandMap);
 
+            sceneData.PuzzleController.Grid[position.x, position.y] = tuple.Item1;
+            sceneData.PuzzleController.TilesRefComponents.Add(tuple.Item1.GameObjectInstanceId, tuple.Item2);
 
-            await PuzzlePresentation.AbsorbToNewTile(puzzle, islandMap, tuple.Item2);
-
-            PuzzleLogic.DestroyTileBatch(puzzle, islandMap);
-
-            puzzle.Grid[position.x, position.y] = tuple.Item1;
-            puzzle.TilesRefComponents.Add(tuple.Item1.GameObjectInstanceId, tuple.Item2);
-
-            await ReusableRule.DropRule(puzzle, position);
-            await ReusableRule.Refill(puzzle, position);
+            await ReusableRule.DropRule(sceneData.PuzzleController, position);
+            await ReusableRule.Refill(sceneData.PuzzleController, position);
         }
-        
-        puzzle.InputAvailable = true;
     }
 }

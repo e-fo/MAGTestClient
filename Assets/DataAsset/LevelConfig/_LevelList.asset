@@ -29,3 +29,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 21c4e2e7ec42c3b40baf5dee4f8a1478, type: 2}
   - {fileID: 11400000, guid: 30c1dfa16f517e74eaa25514036cb395, type: 2}
   - {fileID: 11400000, guid: 14fea5eba5691ae4387cc2d22d1bdab4, type: 2}
+  _typeLessGoalSprite: {fileID: 21300024, guid: 142ff8784e552734f9d6a895491d0ae8, type: 3}
+  _lvlGoalBaseTypeSpriteMap:
+  - _item1: 0
+    _item2: {fileID: 21300024, guid: 142ff8784e552734f9d6a895491d0ae8, type: 3}
+  - _item1: 1
+    _item2: {fileID: 21300000, guid: 324a4009cf51e724eae8df9b86093af0, type: 3}
