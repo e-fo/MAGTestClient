@@ -7,8 +7,8 @@ public interface ICellData { };
 
 public class AnimationScrollRect : MonoBehaviour
 {
+    private const float _SCROLL_OFFSET = 0.5f;
     [SerializeField, Range(1e-2f, 1f)] private float _cellInterval = 0.2f;
-    [SerializeField, Range(0f, 1f)] private float _scrollOffset = 0.5f;
     [SerializeField] private bool _loop = false;
     [SerializeField] private Transform _cellContainer = default;
     [SerializeField] MyScroller _scroller = default;
@@ -34,19 +34,36 @@ public class AnimationScrollRect : MonoBehaviour
 
     public void SelectCell(int index)
     {
-        if (index < 0 || index >= _contentList.Count || index == _selectedIndex)
+        if(!_loop && (index < 0 || index >= _contentList.Count || index == _selectedIndex))
         {
-            if (_loop)
+            return;
+        }
+
+        int result = index;
+        if(_loop)
+        {
+            int diff = Mathf.Abs(index - _selectedIndex);
+
+            if(index < _selectedIndex)
             {
-                index = ArrayUtil.CircularIndex(index, _contentList.Count);
-            } else
+                int circularDiff = _contentList.Count - _selectedIndex + index;
+                if(circularDiff < diff)
+                {
+                    result = _contentList.Count + index;
+                }
+            }
+            else if (index > _selectedIndex)
             {
-                return;
+                int circularDiff = _contentList.Count - index + _selectedIndex;
+                if(circularDiff < diff)
+                {
+                    result = -index;
+                }
             }
         }
 
-        UpdateSelection(index);
-        _scroller.ScrollTo(index, 0.35f, Ease.OutCubic);
+        UpdateSelection(ArrayUtil.CircularIndex(result, _contentList.Count));
+        _scroller.ScrollTo(result, 0.35f, Ease.OutCubic);
     }
 
     private void UpdatePosition(float position, bool forceRefresh)
@@ -60,7 +77,7 @@ public class AnimationScrollRect : MonoBehaviour
 
         _currentPosition = position;
 
-        var p = position - _scrollOffset / _cellInterval;
+        var p = position - _SCROLL_OFFSET / _cellInterval;
         var firstIndex = Mathf.CeilToInt(p);
         var firstPosition = (Mathf.Ceil(p) - p) * _cellInterval;
 
@@ -102,7 +119,8 @@ public class AnimationScrollRect : MonoBehaviour
         {
             var index = firstIndex + i;
             var pos = firstPosition + i * _cellInterval;
-            var cell = _pool[ArrayUtil.CircularIndex(index, _pool.Count)];
+            int idx = ArrayUtil.CircularIndex(index, _pool.Count);
+            var cell = _pool[idx];
 
             if (_loop)
             {
@@ -132,7 +150,7 @@ public class AnimationScrollRect : MonoBehaviour
         int middleIndex = 0;
         for(int i=1; i<activeCells.Count; ++i)
         {
-            if (Mathf.Abs(activeCells[i].CurrentPosition - 0.5f) < Mathf.Abs(activeCells[middleIndex].CurrentPosition - 0.5f))
+            if (Mathf.Abs(activeCells[i].CurrentPosition - _SCROLL_OFFSET) < Mathf.Abs(activeCells[middleIndex].CurrentPosition - _SCROLL_OFFSET))
             {
                 middleIndex = i;
             }
@@ -181,11 +199,11 @@ public class AnimationScrollRect : MonoBehaviour
     {
         if (_EDITOR_CachedLoop != _loop ||
             _EDITOR_CachedCellInterval != _cellInterval ||
-            _EDITOR_CachedScrollOffset != _scrollOffset)
+            _EDITOR_CachedScrollOffset != _SCROLL_OFFSET)
         {
             _EDITOR_CachedLoop = _loop;
             _EDITOR_CachedCellInterval = _cellInterval;
-            _EDITOR_CachedScrollOffset = _scrollOffset;
+            _EDITOR_CachedScrollOffset = _SCROLL_OFFSET;
 
             UpdatePosition(_currentPosition, false);
         }

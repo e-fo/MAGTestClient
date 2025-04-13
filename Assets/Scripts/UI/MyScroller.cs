@@ -77,24 +77,29 @@ public class MyScroller : UIBehaviour, IPointerUpHandler, IPointerDownHandler, I
         }
 
         if(_autoScrollTween.IsActive()) _autoScrollTween.Kill();
+        Debug.Log($"Auto Scroll Started: from:{CurrentPosition} to:{endPos}");
 
-        _autoScrollTween = DOTween.To(()=>CurrentPosition, f=>{
-            CurrentPosition = f;
+        float currentScrollPos = CurrentPosition;
+
+        _autoScrollTween = DOTween.To(()=>currentScrollPos, f=>{
+            //Debug.Log($"Auto Scroll Moving: from:{currentScrollPos} to:{ArrayUtil.CircularPosition(f, TotalCount)}");
+            CurrentPosition = ArrayUtil.CircularPosition(f, TotalCount);
             OnValueChanged?.Invoke(CurrentPosition);
+            currentScrollPos = f;
         },
-        endPos, 
+        endPos,
         duration
         ).SetEase(ease).OnComplete(()=>{
             if(_snap.Enable)
             {
                 CurrentPosition = Mathf.Clamp(Mathf.RoundToInt(CurrentPosition), 0, TotalCount - 1);
                 OnValueChanged?.Invoke(CurrentPosition);
+                OnSelectionChanged?.Invoke(Mathf.RoundToInt(ArrayUtil.CircularPosition(endPos, TotalCount)));
             }
         });
         
         _velocity = 0;
         _startPosition = CurrentPosition;
-        OnSelectionChanged?.Invoke(Mathf.RoundToInt(ArrayUtil.CircularPosition(endPos, TotalCount)));
     }
 
     public void JumpTo(int index)
