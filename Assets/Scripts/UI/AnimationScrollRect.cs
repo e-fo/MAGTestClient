@@ -39,22 +39,23 @@ public class AnimationScrollRect : MonoBehaviour
             return;
         }
 
+        int currentScrollerPosition = Mathf.FloorToInt(_scroller.CurrentPosition);
         int result = index;
         if(_loop)
         {
-            int diff = Mathf.Abs(index - _selectedIndex);
+            int diff = Mathf.Abs(index - currentScrollerPosition);
 
-            if(index < _selectedIndex)
+            if(index < currentScrollerPosition)
             {
-                int circularDiff = _contentList.Count - _selectedIndex + index;
+                int circularDiff = _contentList.Count - currentScrollerPosition + index;
                 if(circularDiff < diff)
                 {
                     result = _contentList.Count + index;
                 }
             }
-            else if (index > _selectedIndex)
+            else if (index > currentScrollerPosition)
             {
-                int circularDiff = _contentList.Count - index + _selectedIndex;
+                int circularDiff = _contentList.Count - index + currentScrollerPosition;
                 if(circularDiff < diff)
                 {
                     result = -index;
