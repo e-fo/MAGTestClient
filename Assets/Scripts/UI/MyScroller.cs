@@ -2,7 +2,6 @@ using DG.Tweening;
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
 using static UnityEngine.UI.ScrollRect;
 
 public enum ScrollDirection
@@ -39,7 +38,7 @@ public class MyScroller : UIBehaviour, IPointerUpHandler, IPointerDownHandler, I
     public bool Inertia = true;
     public float DecelerationRate = 0.03f;
     public bool Draggable = true;
-    public int TotalCount;
+    [NonSerialized] public int TotalCount;
     private Vector2 _beginDragPosition;
     private float _startPosition;
     private float _velocity;
@@ -77,12 +76,11 @@ public class MyScroller : UIBehaviour, IPointerUpHandler, IPointerDownHandler, I
         }
 
         if(_autoScrollTween.IsActive()) _autoScrollTween.Kill();
-        Debug.Log($"Auto Scroll Started: from:{CurrentPosition} to:{endPos}");
 
         float currentScrollPos = CurrentPosition;
 
+        //TODO: this part generates garabage and need an improvement.
         _autoScrollTween = DOTween.To(()=>currentScrollPos, f=>{
-            //Debug.Log($"Auto Scroll Moving: from:{currentScrollPos} to:{ArrayUtil.CircularPosition(f, TotalCount)}");
             CurrentPosition = ArrayUtil.CircularPosition(f, TotalCount);
             OnValueChanged?.Invoke(CurrentPosition);
             currentScrollPos = f;

@@ -34,29 +34,28 @@ public class AnimationScrollRect : MonoBehaviour
 
     public void SelectCell(int index)
     {
-        if(!_loop && (index < 0 || index >= _contentList.Count || index == _selectedIndex))
+        if (!_loop && (index < 0 || index >= _contentList.Count || index == _selectedIndex))
         {
             return;
         }
 
         int currentScrollerPosition = Mathf.FloorToInt(_scroller.CurrentPosition);
         int result = index;
-        if(_loop)
+        if (_loop)
         {
             int diff = Mathf.Abs(index - currentScrollerPosition);
 
-            if(index < currentScrollerPosition)
+            if (index < currentScrollerPosition)
             {
                 int circularDiff = _contentList.Count - currentScrollerPosition + index;
-                if(circularDiff < diff)
+                if (circularDiff < diff)
                 {
                     result = _contentList.Count + index;
                 }
-            }
-            else if (index > currentScrollerPosition)
+            } else if (index > currentScrollerPosition)
             {
                 int circularDiff = _contentList.Count - index + currentScrollerPosition;
-                if(circularDiff < diff)
+                if (circularDiff < diff)
                 {
                     result = -index;
                 }
@@ -147,34 +146,36 @@ public class AnimationScrollRect : MonoBehaviour
     private void UpdateOrdering(IList<Cell> cells)
     {
         List<Cell> activeCells = cells.Where(c => c.gameObject.activeInHierarchy).OrderBy(c => c.CurrentPosition).ToList();
-
-        int middleIndex = 0;
-        for(int i=1; i<activeCells.Count; ++i)
+        if (activeCells.Count > 0)
         {
-            if (Mathf.Abs(activeCells[i].CurrentPosition - _SCROLL_OFFSET) < Mathf.Abs(activeCells[middleIndex].CurrentPosition - _SCROLL_OFFSET))
+            int middleIndex = 0;
+            for (int i = 1; i < activeCells.Count; ++i)
             {
-                middleIndex = i;
-            }
-        }
-
-        float selectedCellPosition = activeCells[middleIndex].CurrentPosition;
-        int c = activeCells.Count;
-        for (var i = 0; i < activeCells.Count; ++i)
-        {
-            if (activeCells[i].CurrentPosition < selectedCellPosition)
-            {
-                activeCells[i].transform.SetSiblingIndex(i);
-            } else
-            {
-                c--;
-                if (activeCells[c].CurrentPosition > selectedCellPosition)
+                if (Mathf.Abs(activeCells[i].CurrentPosition - _SCROLL_OFFSET) < Mathf.Abs(activeCells[middleIndex].CurrentPosition - _SCROLL_OFFSET))
                 {
-                    activeCells[c].transform.SetAsLastSibling();
+                    middleIndex = i;
                 }
             }
-        }
 
-        activeCells[middleIndex].transform.SetAsLastSibling();
+            float selectedCellPosition = activeCells[middleIndex].CurrentPosition;
+            int c = activeCells.Count;
+            for (var i = 0; i < activeCells.Count; ++i)
+            {
+                if (activeCells[i].CurrentPosition < selectedCellPosition)
+                {
+                    activeCells[i].transform.SetSiblingIndex(i);
+                } else
+                {
+                    c--;
+                    if (activeCells[c].CurrentPosition > selectedCellPosition)
+                    {
+                        activeCells[c].transform.SetAsLastSibling();
+                    }
+                }
+            }
+
+            activeCells[middleIndex].transform.SetAsLastSibling();
+        }
     }
 
     private void UpdateSelection(int index)
