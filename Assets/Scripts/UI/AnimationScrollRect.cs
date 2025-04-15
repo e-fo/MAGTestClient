@@ -143,9 +143,11 @@ public class AnimationScrollRect : MonoBehaviour
         }
     }
 
-    private void UpdateOrdering(IList<Cell> cells)
+    private void UpdateOrdering(List<Cell> cells)
     {
+        //TODO: We can reduce garbage generation here.
         List<Cell> activeCells = cells.Where(c => c.gameObject.activeInHierarchy).OrderBy(c => c.CurrentPosition).ToList();
+
         if (activeCells.Count > 0)
         {
             int middleIndex = 0;
