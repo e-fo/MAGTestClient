@@ -77,9 +77,9 @@ public class AnimationScrollRect : MonoBehaviour
 
         _currentPosition = position;
 
-        var p = position - _SCROLL_OFFSET / _cellInterval;
-        var firstIndex = Mathf.CeilToInt(p);
-        var firstPosition = (Mathf.Ceil(p) - p) * _cellInterval;
+        float stratPosition = position - _SCROLL_OFFSET / _cellInterval;
+        int firstIndex = Mathf.CeilToInt(stratPosition);
+        float firstPosition = (Mathf.Ceil(stratPosition) - stratPosition) * _cellInterval;
 
         ResizingPool(firstPosition);
 
@@ -98,16 +98,8 @@ public class AnimationScrollRect : MonoBehaviour
             var addCount = Mathf.CeilToInt((1f - firstPosition) / _cellInterval) - _pool.Count;
             for (var i = 0; i < addCount; i++)
             {
-                var cell = Instantiate(_cellPrefab, _cellContainer).GetComponent<Cell>();
-                if (cell == null)
-                {
-                    throw new MissingComponentException(string.Format(
-                "FancyCell<{0}, {1}> component not found in {2}.",
-                typeof(Cell).FullName, typeof(Cell).FullName, _cellPrefab.name));
-                }
-
+                var cell = Instantiate(_cellPrefab, _cellContainer);
                 cell.Initialize(this);
-
                 _pool.Add(cell);
             }
         }
@@ -115,68 +107,82 @@ public class AnimationScrollRect : MonoBehaviour
 
     private void UpdateCells(float firstPosition, int firstIndex, bool forceRefresh)
     {
-        for (var i = 0; i < _pool.Count; i++)
+        for (int i = 0; i < _pool.Count; i++)
         {
-            var index = firstIndex + i;
-            var pos = firstPosition + i * _cellInterval;
-            int idx = ArrayUtil.CircularIndex(index, _pool.Count);
-            var cell = _pool[idx];
-
+            int index = firstIndex + i;
+            float pos = firstPosition + i * _cellInterval;
             if (_loop)
             {
                 index = ArrayUtil.CircularIndex(index, _contentList.Count);
             }
 
-            if (index < 0 || index >= _contentList.Count || pos > 1f)
+            Cell cell = _pool[ArrayUtil.CircularIndex(index, _pool.Count)];
+            if (index >= 0 && index < _contentList.Count && pos <= 1f)
+            {
+                if (forceRefresh || cell.Index != index || !cell.gameObject.activeSelf)
+                {
+                    cell.Index = index;
+                    cell.Enable(_contentList[index]);
+                }
+                cell.UpdatePosition(pos);
+            } else
             {
                 cell.Disable();
-                continue;
             }
-
-            if (forceRefresh || cell.Index != index || !cell.gameObject.activeSelf)
-            {
-                cell.Index = index;
-                cell.Enable(_contentList[index]);
-            }
-
-            cell.UpdatePosition(pos);
         }
     }
 
-    private void UpdateOrdering(List<Cell> cells)
+    /// <summary>
+    /// Stors active cells to reduce garbage collection in UpdateOrdering() method.
+    /// <para>Key: Cell.transform</para>
+    /// <para>Value: Cell.CurrentPosition</para>
+    /// </summary>
+    private readonly List<KeyValuePair<Transform, float>> _cachedActiveCells = new();
+    private void UpdateOrdering(in List<Cell> cells)
     {
-        //TODO: We can reduce garbage generation here.
-        List<Cell> activeCells = cells.Where(c => c.gameObject.activeInHierarchy).OrderBy(c => c.CurrentPosition).ToList();
+        cells.Sort((a, b) => a.CurrentPosition.CompareTo(b.CurrentPosition));
 
-        if (activeCells.Count > 0)
+        _cachedActiveCells.Capacity = cells.Count;
+        _cachedActiveCells.Clear();
+        for(int i=0; i<cells.Count; ++i)
+        {
+            Cell cell = cells[i];
+            if(cell.gameObject.activeInHierarchy)
+            {
+                _cachedActiveCells.Add(new KeyValuePair<Transform, float>(cell.transform, cell.CurrentPosition));
+            }
+        }
+        int count = _cachedActiveCells.Count;
+
+        if (count > 0)
         {
             int middleIndex = 0;
-            for (int i = 1; i < activeCells.Count; ++i)
+            for (int i = 1; i < count; ++i)
             {
-                if (Mathf.Abs(activeCells[i].CurrentPosition - _SCROLL_OFFSET) < Mathf.Abs(activeCells[middleIndex].CurrentPosition - _SCROLL_OFFSET))
+                if (Mathf.Abs(_cachedActiveCells[i].Value - _SCROLL_OFFSET) < Mathf.Abs(_cachedActiveCells[middleIndex].Value - _SCROLL_OFFSET))
                 {
                     middleIndex = i;
                 }
             }
 
-            float selectedCellPosition = activeCells[middleIndex].CurrentPosition;
-            int c = activeCells.Count;
-            for (var i = 0; i < activeCells.Count; ++i)
+            float selectedCellPosition = _cachedActiveCells[middleIndex].Value;
+            int cIdx = count;
+            for (int i = 0; i < count; ++i)
             {
-                if (activeCells[i].CurrentPosition < selectedCellPosition)
+                if (_cachedActiveCells[i].Value < selectedCellPosition)
                 {
-                    activeCells[i].transform.SetSiblingIndex(i);
+                    _cachedActiveCells[i].Key.SetSiblingIndex(i);
                 } else
                 {
-                    c--;
-                    if (activeCells[c].CurrentPosition > selectedCellPosition)
+                    cIdx--;
+                    if (_cachedActiveCells[cIdx].Value > selectedCellPosition)
                     {
-                        activeCells[c].transform.SetAsLastSibling();
+                        _cachedActiveCells[cIdx].Key.SetAsLastSibling();
                     }
                 }
             }
 
-            activeCells[middleIndex].transform.SetAsLastSibling();
+            _cachedActiveCells[middleIndex].Key.SetAsLastSibling();
         }
     }
 
@@ -197,17 +203,14 @@ public class AnimationScrollRect : MonoBehaviour
 
 #if UNITY_EDITOR
     bool _EDITOR_CachedLoop;
-    float _EDITOR_CachedCellInterval, _EDITOR_CachedScrollOffset;
+    float _EDITOR_CachedCellInterval;
 
     void LateUpdate()
     {
-        if (_EDITOR_CachedLoop != _loop ||
-            _EDITOR_CachedCellInterval != _cellInterval ||
-            _EDITOR_CachedScrollOffset != _SCROLL_OFFSET)
+        if (_EDITOR_CachedLoop != _loop || _EDITOR_CachedCellInterval != _cellInterval )
         {
             _EDITOR_CachedLoop = _loop;
             _EDITOR_CachedCellInterval = _cellInterval;
-            _EDITOR_CachedScrollOffset = _SCROLL_OFFSET;
 
             UpdatePosition(_currentPosition, false);
         }
